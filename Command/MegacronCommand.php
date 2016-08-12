@@ -2,6 +2,7 @@
 
 namespace Comparon\SchedulingBundle\Command;
 
+use Comparon\SchedulingBundle\Helper\TaskProcessorFacade;
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Comparon\SchedulingBundle\Model\TaskInterface;
 use Cron\CronExpression;
@@ -32,15 +33,11 @@ class MegacronCommand extends ContainerAwareCommand
                 $configs = $command->getTaskConfigurations();
                 foreach ($configs as $config) {
                     if ($this->isDue($config, $now)) {
-                        $this->processTask($command, $config);
+                        TaskProcessorFacade::process($output, $command, $config);
                     }
                 }
             }
         }
-    }
-
-    private function processTask($command, $config) {
-        
     }
 
     private function isDue(TaskConfiguration $taskConfiguration, \DateTime $now)
