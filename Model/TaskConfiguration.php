@@ -11,7 +11,7 @@ class TaskConfiguration
     private $withOverlapping;
 
     /** @var string[] */
-    private $parameters;
+    private $parameters = [];
 
     /**
      * @return boolean
