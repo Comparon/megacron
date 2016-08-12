@@ -9,14 +9,10 @@ use Doctrine\Common\Annotations\Annotation;
  */
 class TaskSchedule
 {
-    /**
-     * @var string
-     */
-    private $cronCommand;
+    /** @var string */
+    private $cronExpression;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isWithoutOverlapping = false;
 
     /**
@@ -24,11 +20,13 @@ class TaskSchedule
      */
     public function __construct(array $options)
     {
+        // Map first option to our variable name.
         if (isset($options['value'])) {
-            $options['cronCommand'] = $options['value'];
+            $options['cronExpression'] = $options['value'];
             unset($options['value']);
         }
 
+        // Map options to class properties.
         foreach ($options as $key => $value) {
             if (!property_exists($this, $key)) {
                 throw new \InvalidArgumentException(sprintf('Property "%s" does not exist', $key));
@@ -40,9 +38,9 @@ class TaskSchedule
     /**
      * @return string
      */
-    public function getCronCommand()
+    public function getCronExpression()
     {
-        return $this->cronCommand;
+        return $this->cronExpression;
     }
 
     /**
