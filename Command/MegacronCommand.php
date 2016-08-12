@@ -2,7 +2,7 @@
 
 namespace Comparon\SchedulingBundle\Command;
 
-use Comparon\SchedulingBundle\Helper\TaskProcessorFacade;
+use Comparon\SchedulingBundle\Facade\TaskProcessorFacade;
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Comparon\SchedulingBundle\Model\TaskInterface;
 use Cron\CronExpression;
