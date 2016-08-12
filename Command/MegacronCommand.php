@@ -2,7 +2,8 @@
 
 namespace Comparon\SchedulingBundle\Command;
 
-use Comparon\SchedulingBundle\Annotation\TaskSchedule;
+use Comparon\SchedulingBundle\Model\TaskConfiguration;
+use Comparon\SchedulingBundle\Model\TaskInterface;
 use Cron\CronExpression;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -37,23 +38,20 @@ class MegacronCommand extends ContainerAwareCommand
     private function getScheduledTasks()
     {
         $tasks = [];
-        /** @var Reader */
-        $annotationReader = $this->getContainer()->get('annotation_reader');
         $now = new \DateTime('now');
         foreach ($this->getApplication()->all() as $command) {
-            $reflectionClass = new \ReflectionClass($command);
-            foreach ($annotationReader->getClassAnnotations($reflectionClass) as $annotation) {
-                if ($annotation instanceof TaskSchedule && $this->isScheduled($annotation, $now)) {
-                    $tasks[] = $command;
-                }
+            if (   $command instanceof TaskInterface
+                && $this->isScheduled($command->getTaskConfigurations(), $now)
+            ) {
+                $tasks[] = $command;
             }
         }
         return $tasks;
     }
 
-    private function isScheduled($annotation, $now)
+    private function isScheduled(TaskConfiguration $taskConfiguration, \DateTime $now)
     {
-        $expression = $annotation->getCronExpression();
+        $expression = $taskConfiguration->getCronExpression();
         if (CronExpression::isValidExpression($expression)) {
             $cron = CronExpression::factory($expression);
             return $cron->isDue($now);
