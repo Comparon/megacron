@@ -14,7 +14,7 @@ class TaskProcessorFacade
         if (self::isDue($config)) {
             $args = implode(' ', $config->getParameters());
             $process = new Process('./console ' . $command->getName() . ' ' . $args);
-            $process->run();
+            $process->start();
         }
     }
 
