@@ -41,7 +41,6 @@ class MegacronCommand extends ContainerAwareCommand
         /** @var Reader */
         $annotationReader = $this->getContainer()->get('annotation_reader');
         $commands = [];
-        $this->getApplication()->
         foreach($this->getApplication()->all() as $command)
         {
             $reflectionClass = new \ReflectionClass($command);
