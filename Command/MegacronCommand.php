@@ -26,30 +26,24 @@ class MegacronCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $commands = $this->getScheduledTasks();
-        foreach ($commands as $command) {
-            $output->writeln($command->getName());
-        }
-    }
-
-    /**
-     * @return array
-     */
-    private function getScheduledTasks()
-    {
-        $tasks = [];
         $now = new \DateTime('now');
         foreach ($this->getApplication()->all() as $command) {
-            if (   $command instanceof TaskInterface
-                && $this->isScheduled($command->getTaskConfigurations(), $now)
-            ) {
-                $tasks[] = $command;
+            if ($command instanceof TaskInterface) {
+                $configs = $command->getTaskConfigurations();
+                foreach ($configs as $config) {
+                    if ($this->isDue($config, $now)) {
+                        $this->processTask($command, $config);
+                    }
+                }
             }
         }
-        return $tasks;
     }
 
-    private function isScheduled(TaskConfiguration $taskConfiguration, \DateTime $now)
+    private function processTask($command, $config) {
+        
+    }
+
+    private function isDue(TaskConfiguration $taskConfiguration, \DateTime $now)
     {
         $expression = $taskConfiguration->getCronExpression();
         if (CronExpression::isValidExpression($expression)) {
