@@ -3,7 +3,7 @@
 namespace Comparon\SchedulingBundle\Facade;
 
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
-use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
@@ -14,11 +14,13 @@ class TaskProcessorFacade
         ContainerAwareCommand $command,
         TaskConfiguration $config
     ) {
-        $input = new ArgvInput($config->getParameters());
+        $input = new ArrayInput($config->getParameters());
         try {
             $output->writeln($command->getName());
             $returnCode = $command->execute($input, $output);
+            echo $returnCode;
         } catch (\Exception $e) {
+
             $returnCode = -1;
             //TODO LOG
         }
