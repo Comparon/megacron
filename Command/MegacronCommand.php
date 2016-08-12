@@ -10,9 +10,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\Common\Annotations\Reader;
 
-/**
- * @TaskSchedule("4711")
- */
 class MegacronCommand extends ContainerAwareCommand
 {
     protected function configure()
