@@ -15,6 +15,11 @@ class TaskSchedule
     private $cronCommand;
 
     /**
+     * @var bool
+     */
+    private $isWithoutOverlapping = false;
+
+    /**
      * @param array $options
      */
     public function __construct(array $options)
@@ -38,5 +43,13 @@ class TaskSchedule
     public function getCronCommand()
     {
         return $this->cronCommand;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsWithoutOverlapping()
+    {
+        return $this->isWithoutOverlapping;
     }
 }
