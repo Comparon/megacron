@@ -11,10 +11,4 @@ interface TaskInterface
      * @return TaskConfiguration[]
      */
     public function getTaskConfigurations();
-
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    public function execute(InputInterface $input, OutputInterface $output);
 }
