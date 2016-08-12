@@ -8,7 +8,7 @@ class TaskConfiguration
     private $cronExpression;
 
     /** @var bool */
-    private $isWithOverlapping;
+    private $withOverlapping;
 
     /** @var string[] */
     private $parameters;
@@ -16,18 +16,18 @@ class TaskConfiguration
     /**
      * @return boolean
      */
-    public function isIsWithOverlapping()
+    public function isWithOverlapping()
     {
-        return $this->isWithOverlapping;
+        return $this->withOverlapping;
     }
 
     /**
-     * @param $isWithOverlapping
+     * @param bool $withOverlapping
      * @return $this
      */
-    public function setIsWithOverlapping($isWithOverlapping)
+    public function setWithOverlapping($withOverlapping)
     {
-        $this->isWithOverlapping = $isWithOverlapping;
+        $this->withOverlapping = $withOverlapping;
         return $this;
     }
 
