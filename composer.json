@@ -1,0 +1,14 @@
+{
+  "name": "Comparon/SchedulingBundle",
+  "description": "",
+  "license": "MIT",
+  "type": "symfony-bundle",
+  "autoload": {
+    "psr-4": {
+      "Comparon\\SchedulingBundle\\": "/"
+    }
+  },
+  "require": {
+    "mtdowling/cron-expression": "1.1.0"
+  }
+}

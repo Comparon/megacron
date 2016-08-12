@@ -1,0 +1,3 @@
+comparon_scheduling_homepage:
+    path:     /
+    defaults: { _controller: ComparonSchedulingBundle:Default:index }
