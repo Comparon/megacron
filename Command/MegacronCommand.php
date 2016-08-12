@@ -10,6 +10,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Doctrine\Common\Annotations\Reader;
 
+/**
+ * @TaskSchedule("4711")
+ */
 class MegacronCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -24,12 +27,10 @@ class MegacronCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $argument = $input->getArgument('argument');
-        if ($input->getOption('option')) {
-            // ...
+        $commands = $this->scanCommands();
+        foreach ($commands as $command) {
+            $output->writeln($command->getName());
         }
-
-        $output->writeln('Command result.');
     }
 
     /**
@@ -40,6 +41,7 @@ class MegacronCommand extends ContainerAwareCommand
         /** @var Reader */
         $annotationReader = $this->getContainer()->get('annotation_reader');
         $commands = [];
+        $this->getApplication()->
         foreach($this->getApplication()->all() as $command)
         {
             $reflectionClass = new \ReflectionClass($command);

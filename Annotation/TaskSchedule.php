@@ -15,9 +15,9 @@ class TaskSchedule
     private $cronCommand;
 
     /**
-     * @param array $data
+     * @param array $options
      */
-    public function __construct(array $data)
+    public function __construct(array $options)
     {
         if (isset($options['value'])) {
             $options['cronCommand'] = $options['value'];
