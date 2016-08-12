@@ -4,12 +4,12 @@ namespace Comparon\SchedulingBundle\Facade;
 
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Bundle\FrameworkBundle\Command\Command;
 use Symfony\Component\Process\Process;
 
 class TaskProcessorFacade
 {
-    public static function process(ContainerAwareCommand $command, TaskConfiguration $config)
+    public static function process(Command $command, TaskConfiguration $config)
     {
         if (self::isDue($config)) {
             $args = implode(' ', $config->getParameters());
