@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Helper;
+namespace Comparon\SchedulingBundle\Facade;
 
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Symfony\Component\Console\Input\ArgvInput;
