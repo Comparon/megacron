@@ -22,20 +22,31 @@ class MegacronCommand extends ContainerAwareCommand
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $rootDir = $this->getContainer()->get('kernel')->getRootDir();
-        $consolePath = $rootDir . DIRECTORY_SEPARATOR
-            . '..' . DIRECTORY_SEPARATOR
-            . 'bin' . DIRECTORY_SEPARATOR
-            . 'console';
         foreach ($this->getApplication()->all() as $command) {
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
                 foreach ($configs as $config) {
-                    TaskProcessorFacade::process($consolePath, $command, $config);
+                    (new TaskProcessorFacade($this->getConsolePath(), $command, $config))->process();
                 }
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    private function getConsolePath()
+    {
+        return $this->getContainer()->get('kernel')->getRootDir()
+            . DIRECTORY_SEPARATOR . '..'
+            . DIRECTORY_SEPARATOR  . 'bin'
+            . DIRECTORY_SEPARATOR . 'console'
+        ;
     }
 }
