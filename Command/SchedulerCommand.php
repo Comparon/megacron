@@ -10,12 +10,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class MegacronCommand extends ContainerAwareCommand
+class SchedulerCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
         $this
-            ->setName('Megacron')
+            ->setName('comparon:scheduler:run')
             ->setDescription('...')
             ->addArgument('argument', InputArgument::OPTIONAL, 'Argument description')
             ->addOption('option', null, InputOption::VALUE_NONE, 'Option description')
