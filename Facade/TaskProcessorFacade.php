@@ -4,23 +4,47 @@ namespace Comparon\SchedulingBundle\Facade;
 
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\Command;
 use Symfony\Component\Process\Process;
 
 class TaskProcessorFacade
 {
-    public static function process($consolePath, Command $command, TaskConfiguration $config)
+    /** @var string */
+    private $consolePath;
+
+    /** @var Command */
+    private $command;
+
+    /** @var TaskConfiguration */
+    private $taskConfig;
+
+    /**
+     * @param string $consolePath
+     * @param Command $command
+     * @param TaskConfiguration $taskConfig
+     */
+    public function __construct($consolePath, Command $command, TaskConfiguration $taskConfig)
     {
-        if (self::isDue($config)) {
-            $args = implode(' ', $config->getParameters());
-            $process = new Process($consolePath . ' ' . $command->getName() . ' ' . $args);
+        $this->consolePath = $consolePath;
+        $this->command = $command;
+        $this->taskConfig = $taskConfig;
+    }
+
+    public function process()
+    {
+        if ($this->isDue() && !$this->isOverlapping()) {
+            $args = implode(' ', $this->config->getParameters());
+            $process = new Process($this->consolePath . ' ' . $this->command->getName() . ' ' . $args);
             $process->start();
         }
     }
 
-    private static function isDue(TaskConfiguration $taskConfiguration)
+    /**
+     * @return bool
+     */
+    private function isDue()
     {
-        $expression = $taskConfiguration->getCronExpression();
+        $expression = $this->taskConfig->getCronExpression();
         if (CronExpression::isValidExpression($expression)) {
             $cron = CronExpression::factory($expression);
             return $cron->isDue(new \DateTime('now'));
@@ -28,4 +52,16 @@ class TaskProcessorFacade
         // TODO: Log
         return false;
     }
+
+    /**
+     * @return bool
+     */
+    private function isOverlapping()
+    {
+        if (!$this->taskConfig->isWithOverlapping()) {
+            $key = $this->command->getName() . $this->taskConfig->getCronExpression();
+        }
+        return false;
+    }
 }
+
