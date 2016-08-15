@@ -32,7 +32,7 @@ class MegacronCommand extends ContainerAwareCommand
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
                 foreach ($configs as $config) {
-                    (new TaskProcessorFacade($this->getConsolePath(), $command, $config))->process();
+                    (new TaskProcessorFacade($this->getBinDirPath(), $command, $config))->process();
                 }
             }
         }
@@ -41,12 +41,12 @@ class MegacronCommand extends ContainerAwareCommand
     /**
      * @return string
      */
-    private function getConsolePath()
+    private function getBinDirPath()
     {
         return $this->getContainer()->get('kernel')->getRootDir()
             . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR  . 'bin'
-            . DIRECTORY_SEPARATOR . 'console'
+            . DIRECTORY_SEPARATOR
         ;
     }
 }

@@ -10,7 +10,7 @@ use Symfony\Component\Process\Process;
 class TaskProcessorFacade
 {
     /** @var string */
-    private $consolePath;
+    private $binDirPath;
 
     /** @var Command */
     private $command;
@@ -19,13 +19,13 @@ class TaskProcessorFacade
     private $taskConfig;
 
     /**
-     * @param string $consolePath
+     * @param string $binDirPath
      * @param Command $command
      * @param TaskConfiguration $taskConfig
      */
-    public function __construct($consolePath, Command $command, TaskConfiguration $taskConfig)
+    public function __construct($binDirPath, Command $command, TaskConfiguration $taskConfig)
     {
-        $this->consolePath = $consolePath;
+        $this->binDirPath = $binDirPath;
         $this->command = $command;
         $this->taskConfig = $taskConfig;
     }
@@ -34,7 +34,7 @@ class TaskProcessorFacade
     {
         if ($this->isDue() && !$this->isOverlapping()) {
             $args = implode(' ', $this->config->getParameters());
-            $process = new Process($this->consolePath . ' ' . $this->command->getName() . ' ' . $args);
+            $process = new Process($this->binDirPath . 'console ' . $this->command->getName() . ' ' . $args);
             $process->start();
         }
     }
