@@ -2,7 +2,7 @@
 
 namespace Comparon\SchedulingBundle\Command;
 
-use Comparon\SchedulingBundle\Facade\TaskProcessorFacade;
+use Comparon\SchedulingBundle\Helper\TaskProcessorHelper;
 use Comparon\SchedulingBundle\Model\TaskInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -32,7 +32,7 @@ class MegacronCommand extends ContainerAwareCommand
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
                 foreach ($configs as $config) {
-                    (new TaskProcessorFacade($this->getBinDirPath(), $command, $config))->process();
+                    (new TaskProcessorHelper($this->getBinDirPath(), $command, $config))->process();
                 }
             }
         }
