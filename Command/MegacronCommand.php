@@ -24,11 +24,16 @@ class MegacronCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $rootDir = $this->getContainer()->get('kernel')->getRootDir();
+        $consolePath = $rootDir . DIRECTORY_SEPARATOR
+            . '..' . DIRECTORY_SEPARATOR
+            . 'bin' . DIRECTORY_SEPARATOR
+            . 'console';
         foreach ($this->getApplication()->all() as $command) {
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
                 foreach ($configs as $config) {
-                    TaskProcessorFacade::process($command, $config);
+                    TaskProcessorFacade::process($consolePath, $command, $config);
                 }
             }
         }

@@ -9,11 +9,11 @@ use Symfony\Component\Process\Process;
 
 class TaskProcessorFacade
 {
-    public static function process(Command $command, TaskConfiguration $config)
+    public static function process($consolePath, Command $command, TaskConfiguration $config)
     {
         if (self::isDue($config)) {
             $args = implode(' ', $config->getParameters());
-            $process = new Process('./console ' . $command->getName() . ' ' . $args);
+            $process = new Process($consolePath . ' ' . $command->getName() . ' ' . $args);
             $process->start();
         }
     }
