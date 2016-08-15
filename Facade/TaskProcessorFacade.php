@@ -4,7 +4,7 @@ namespace Comparon\SchedulingBundle\Facade;
 
 use Comparon\SchedulingBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
-use Symfony\Bundle\FrameworkBundle\Command\Command;
+use Symfony\Component\Console\Command\Command;;
 use Symfony\Component\Process\Process;
 
 class TaskProcessorFacade
@@ -36,7 +36,7 @@ class TaskProcessorFacade
     public function process()
     {
         if ($this->isDue() && !$this->isOverlapping()) {
-            $args = implode(' ', $this->config->getParameters());
+            $args = implode(' ', $this->taskConfig->getParameters());
             $process = new Process($this->binDirPath . 'console ' . $this->command->getName() . ' ' . $args);
             $process->start();
             return $process->getPid();
