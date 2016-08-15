@@ -8,7 +8,7 @@ class TaskConfiguration
     private $cronExpression;
 
     /** @var bool */
-    private $withOverlapping;
+    private $withOverlapping = true;
 
     /** @var string[] */
     private $parameters = [];
