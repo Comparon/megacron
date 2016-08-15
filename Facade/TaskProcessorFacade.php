@@ -30,13 +30,18 @@ class TaskProcessorFacade
         $this->taskConfig = $taskConfig;
     }
 
+    /**
+     * @return int|null
+     */
     public function process()
     {
         if ($this->isDue() && !$this->isOverlapping()) {
             $args = implode(' ', $this->config->getParameters());
             $process = new Process($this->consolePath . ' ' . $this->command->getName() . ' ' . $args);
             $process->start();
+            return $process->getPid();
         }
+        return null;
     }
 
     /**
