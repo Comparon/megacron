@@ -30,18 +30,44 @@ class TaskProcessorFacade
         $this->taskConfig = $taskConfig;
     }
 
-    /**
-     * @return int|null
-     */
     public function process()
     {
-        if ($this->isDue() && !$this->isOverlapping()) {
-            $args = implode(' ', $this->taskConfig->getParameters());
-            $process = new Process($this->binDirPath . 'console ' . $this->command->getName() . ' ' . $args);
-            $process->start();
-            return $process->getPid();
+        $pidFileDir = $this->binDirPath
+            . '..' . DIRECTORY_SEPARATOR
+            . 'var' . DIRECTORY_SEPARATOR
+            . 'comparon_scheduling' . DIRECTORY_SEPARATOR;
+
+        if (!file_exists($pidFileDir)) {
+            if (!mkdir($pidFileDir)) {
+                throw new Exception("Could not create directory {$pidFileDir}");
+            }
         }
-        return null;
+
+        $processHash = sha1($this->command->getName() . $this->taskConfig->getCronExpression());
+        $pidFilePath = $pidFileDir . $processHash . '.pid';
+
+        if($this->isDue()) {
+            $args = implode(' ', $this->taskConfig->getParameters());
+            $processCmd = trim($this->binDirPath . 'console ' . $this->command->getName() . ' ' . $args);
+            $processCmdSuffix = ' > /dev/null 2>/dev/null &';
+            if (file_exists($pidFilePath) && $this->taskConfig->isWithOverlapping()) {
+                unlink($pidFilePath);
+            }
+
+            if (!$this->taskConfig->isWithOverlapping()) {
+                if (file_exists($pidFilePath)) {
+                    $pid = intval(file_get_contents($pidFilePath));
+                    $result = shell_exec("ps -fp {$pid}");
+                    if(strpos($result, $processCmd) !== false) {
+                        return;
+                    }
+                }
+
+                file_put_contents($pidFilePath, '');
+                $processCmdSuffix .= ' echo $! >> ' . $pidFilePath;
+            }
+            shell_exec($processCmd . $processCmdSuffix);
+        }
     }
 
     /**
@@ -55,17 +81,6 @@ class TaskProcessorFacade
             return $cron->isDue(new \DateTime('now'));
         }
         // TODO: Log
-        return false;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isOverlapping()
-    {
-        if (!$this->taskConfig->isWithOverlapping()) {
-            $key = $this->command->getName() . $this->taskConfig->getCronExpression();
-        }
         return false;
     }
 }
