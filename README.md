@@ -2,8 +2,7 @@
 
 # Comparon Scheduling Bundle
 
-This bundle is designed around the idea that you have one command that is triggered by crontab and handles the
-scheduling of the other commands ... TODO
+This bundle is designed around the idea to schedule the commands within the project and therefore under VCS control.
 
 ## Installation
 
@@ -17,10 +16,13 @@ scheduling of the other commands ... TODO
         "Comparon/SchedulingBundle": "dev-master"
     },
     // ...
-    "repositories": [{
-        "type": "vcs",
-        "url": "https://github.com/Comparon/ComparonSchedulingBundle.git"
-    }]
+    "repositories": [
+        // ...
+        {
+            "type": "vcs",
+            "url": "https://github.com/Comparon/ComparonSchedulingBundle.git"
+        }
+    ]
 }
 ```
 
@@ -62,9 +64,22 @@ class DemoCommand extends ContainerAwareCommand implements TaskInterface
         // ...
     }
     
+    /**
+     * @return TaskConfiguration[]
+     */
     public function getTaskConfigurations()
     {
-        TODO
+        $configs = [];
+        
+        $configMonday = new TaskConfiguration();
+        $configMonday->setCronExpression('* * * * 1');
+        $configs[] = $configMonday;
+        
+        $configTuesday = new TaskConfiguration();
+        $configTuesday->setCronExpression('* * * * 2');
+        $configs[] = $configTuesday;
+        
+        return $configs;
     }
 }
 ```
@@ -73,5 +88,5 @@ class DemoCommand extends ContainerAwareCommand implements TaskInterface
 
 To facilitate this, you can create a cron job on your system like this:
 ```
-* * * * * cd /<path to bin folder>; ./console Megacron
+* * * * * <path to console> comparon:scheduler:run
 ```
