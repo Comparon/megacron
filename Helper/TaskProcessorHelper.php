@@ -38,14 +38,13 @@ class TaskProcessorHelper
         $processHash = sha1($this->command->getName() . $this->taskConfig->getCronExpression());
         $pidFilePath = $pidFileDir . $processHash . '.pid';
 
-        if($this->isDue()) {
-            $args = '';
-            if (count($this->taskConfig->getParameters()) > 0) {
-                $args = implode(' ', $this->taskConfig->getParameters());
-            }
-
-            $processCmd = $this->binDirPath . 'console ' . $this->command->getName() . ' ' . $args;
+        if ($this->isDue()) {
+            $processCmd = $this->binDirPath . 'console ' . $this->command->getName();
             $processCmdSuffix = ' > /dev/null 2>/dev/null &';
+
+            if (count($this->taskConfig->getParameters()) > 0) {
+                $processCmd .= ' ' . implode(' ', $this->taskConfig->getParameters());
+            }
 
             if (file_exists($pidFilePath)) {
                 if ($this->taskConfig->isWithOverlapping()) {
@@ -53,7 +52,7 @@ class TaskProcessorHelper
                 } else {
                     $pid = intval(file_get_contents($pidFilePath));
                     $result = shell_exec("ps -fp {$pid}");
-                    if(strpos($result, $processCmd) !== false) {
+                    if (strpos($result, $processCmd) !== false) {
                         return;
                     }
                 }
@@ -63,7 +62,7 @@ class TaskProcessorHelper
                 file_put_contents($pidFilePath, '');
                 $processCmdSuffix .= ' echo $! >> ' . $pidFilePath;
             }
-            
+
             shell_exec($processCmd . $processCmdSuffix);
         }
     }
