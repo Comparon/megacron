@@ -7,14 +7,18 @@ class TaskConfiguration
     /** @var string */
     private $cronExpression;
 
-    /** @var bool */
+    /**
+     * Indicates if the command should overlap itself.
+     *
+     * @var bool
+     */
     private $withOverlapping = true;
 
     /** @var string[] */
     private $parameters = [];
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isWithOverlapping()
     {
