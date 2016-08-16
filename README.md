@@ -1,5 +1,3 @@
-# Project is WIP
-
 # Comparon Scheduling Bundle
 
 This bundle is designed around the idea to schedule the commands within the project and therefore under VCS control.
@@ -76,7 +74,10 @@ class DemoCommand extends ContainerAwareCommand implements TaskInterface
         $configs[] = $configMonday;
         
         $configTuesday = new TaskConfiguration();
-        $configTuesday->setCronExpression('* * * * 2');
+        $configTuesday
+            ->setCronExpression('0 * * * 2')
+            ->setWithOverlapping(false)
+        ;
         $configs[] = $configTuesday;
         
         return $configs;
