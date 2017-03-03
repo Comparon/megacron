@@ -90,7 +90,7 @@ class TaskProcessorHelper
     {
         return $this->binDirPath . '..'
         . DIRECTORY_SEPARATOR . 'var'
-        . DIRECTORY_SEPARATOR . 'megacron_scheduling'
+        . DIRECTORY_SEPARATOR . 'megacron'
         . DIRECTORY_SEPARATOR;
     }
 
