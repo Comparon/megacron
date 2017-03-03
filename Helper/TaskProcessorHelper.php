@@ -141,7 +141,6 @@ class TaskProcessorHelper
             $megaCronHistory->setStopped(new \DateTime());
             $this->em->persist($megaCronHistory);
             $this->em->flush();
-            $this->taskConfig->setMegaCronHistory($megaCronHistory);
         }
     }
 }
