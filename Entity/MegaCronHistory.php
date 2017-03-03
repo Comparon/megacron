@@ -74,14 +74,6 @@ abstract class MegaCronHistory
     }
 
     /**
-     * @param \DateTime $started
-     */
-    public function setStarted(\DateTime $started = null)
-    {
-        $this->started = $started;
-    }
-
-    /**
      * @return \DateTime
      */
     public function getStopped()
