@@ -1,12 +1,12 @@
 {
-    "name": "Comparon/SchedulingBundle",
+    "name": "comparon/megacron",
     "description": "",
     "license": "MIT",
     "type": "symfony-bundle",
     "minimum-stability": "dev",
     "autoload": {
       "psr-4": {
-        "Comparon\\SchedulingBundle\\": "/"
+        "comparon\\megacron\\": "/"
       }
     },
     "require": {
