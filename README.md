@@ -18,7 +18,7 @@ This bundle is designed around the idea to schedule the commands within the proj
         // ...
         {
             "type": "vcs",
-            "url": "https://github.com/Comparon/ComparonSchedulingBundle.git"
+            "url": "https://github.com/Comparon/Megacron.git"
         }
     ]
 }
@@ -36,28 +36,18 @@ public function registerBundles()
 {
     $bundles = [
         // ...
-        new Comparon\SchedulingBundle\ComparonSchedulingBundle(),
+        new Comparon\MegacronBundle\ComparonMegacronBundle(),
     ];
     // ...
     return $bundles;
 }
 ```
 
-4. Add in config.yml the name of table for history entries:
+4. Update the database structure by doctrine.
 
-```yml
-
-megacron:
-    history_table: 'history_table_name'
-
-```
-
-By default, the value is 'megacron_history'. If you don't want use the history_table, set history_table to null.
-
-MegaCron store for every executing Command the name, the start and the end time. 
+MegaCron can store for every executing Command the name, the start and the end time in 'comparon_megacron_history'. 
 If the command is broken, the end time will be NULL.
 
-5. Update the database structure by doctrine.
 
 ## Start using the bundle
 

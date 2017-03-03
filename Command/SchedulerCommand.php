@@ -1,9 +1,9 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Command;
+namespace Comparon\MegacronBundle\Command;
 
-use Comparon\SchedulingBundle\Helper\TaskProcessorHelper;
-use Comparon\SchedulingBundle\Model\TaskInterface;
+use Comparon\MegacronBundle\Helper\TaskProcessorHelper;
+use Comparon\MegacronBundle\Model\TaskInterface;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,11 +32,8 @@ class SchedulerCommand extends ContainerAwareCommand
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
                 $entityManager = null;
-                if (($this->getContainer()->has('doctrine')) && ($this->getContainer()->hasParameter('megacron.history_table'))) {
-                    $megaCronHistoryTable = $this->getContainer()->getParameter('megacron.history_table');
-                    if ($megaCronHistoryTable !== null) {
+                if ($this->getContainer()->has('doctrine')) {
                         $entityManager = $this->getContainer()->get('doctrine')->getEntityManager();
-                    }
                 }
                 foreach ($configs as $config) {
                     (new TaskProcessorHelper($this->getBinDirPath(), $command, $config, $entityManager))->process();

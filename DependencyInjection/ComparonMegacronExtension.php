@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\SchedulingBundle\DependencyInjection;
+namespace Comparon\MegacronBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * @link http://symfony.com/doc/current/cookbook/bundles/extension.html
  */
-class ComparonSchedulingExtension extends Extension
+class ComparonMegacronExtension extends Extension
 {
     /**
      * {@inheritdoc}
@@ -24,5 +24,10 @@ class ComparonSchedulingExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    public function getAlias()
+    {
+        return 'comparon_megacron';
     }
 }

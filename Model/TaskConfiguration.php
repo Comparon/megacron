@@ -1,8 +1,8 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Model;
+namespace Comparon\MegacronBundle\Model;
 
-use Comparon\SchedulingBundle\Entity\MegaCronHistory;
+use Comparon\MegacronBundle\Entity\MegaCronHistory;
 
 class TaskConfiguration
 {
