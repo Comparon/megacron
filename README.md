@@ -43,6 +43,22 @@ public function registerBundles()
 }
 ```
 
+4. Add in config.yml the name of table for history entries:
+
+```yml
+
+megacron:
+    history_table: 'history_table_name'
+
+```
+
+By default, the value is 'megacron_history'. If you don't want use the history_table, set history_table to null.
+
+MegaCron store for every executing Command the name, the start and the end time. 
+If the command is broken, the end time will be NULL.
+
+5. Update the database structure by doctrine.
+
 ## Start using the bundle
 
 ### Schedule your Command
@@ -77,6 +93,7 @@ class DemoCommand extends ContainerAwareCommand implements TaskInterface
         $configTuesday
             ->setCronExpression('0 * * * 2')
             ->setWithOverlapping(false)
+            ->persistHistory()
         ;
         $configs[] = $configTuesday;
         
