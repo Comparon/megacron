@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('megacron')
+        $rootNode = $treeBuilder->root('comparon_megacron')
                 ->children()
                 ->scalarNode('history_table')->defaultValue('megacron_history')->end()
                 ->end()
