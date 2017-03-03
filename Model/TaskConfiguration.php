@@ -16,8 +16,8 @@ class TaskConfiguration
      */
     private $withOverlapping = true;
 
-    /** @var MegaCronHistory */
-    private $megaCronHistory = null;
+    /** @var bool */
+    private $useMegaCronHistoryEntries = false;
 
     /** @var string[] */
     private $parameters = [];
@@ -77,19 +77,15 @@ class TaskConfiguration
     }
 
     /**
-     * @return MegaCronHistory
+     * @return boolean
      */
-    public function getMegaCronHistory()
+    public function getUseMegaCronHistoryEntries()
     {
-        return $this->megaCronHistory;
+        return $this->useMegaCronHistoryEntries;
     }
 
-    /**
-     * Set MegaCronHistory-Entry, if you want a simple Entry for start and finish of cronJob
-     * @param MegaCronHistory $megaCronHistory
-     */
-    public function setMegaCronHistory($megaCronHistory)
+    public function enableMegaCronHistoryEntries()
     {
-        $this->megaCronHistory = $megaCronHistory;
+        $this->useMegaCronHistoryEntries = true;
     }
 }

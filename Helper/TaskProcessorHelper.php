@@ -8,7 +8,6 @@ use Cron\CronExpression;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
 
-;
 use Symfony\Component\Process\Process;
 
 class TaskProcessorHelper
@@ -39,7 +38,7 @@ class TaskProcessorHelper
         $this->command = $command;
         $this->taskConfig = $taskConfig;
         $this->em = $em;
-        $this->startStorageHistoryEntries = ($em instanceof EntityManagerInterface) && ($this->taskConfig->getMegaCronHistory() instanceof MegaCronHistory);
+        $this->startStorageHistoryEntries = ($em instanceof EntityManagerInterface) && ($this->taskConfig->getUseMegaCronHistoryEntries());
     }
 
     public function process()
@@ -58,7 +57,7 @@ class TaskProcessorHelper
                 $processCmd .= ' ' . implode(' ', $this->taskConfig->getParameters());
             }
 
-            $this->setMegaCronHistoryStarted();
+            $megacronHistoryEntry = $this->setMegaCronHistoryStarted();
 
             if (file_exists($pidFilePath)) {
                 if ($this->taskConfig->isWithOverlapping()) {
@@ -67,7 +66,7 @@ class TaskProcessorHelper
                     $pid = intval(file_get_contents($pidFilePath));
                     $result = shell_exec("ps -fp {$pid}");
                     if (strpos($result, $processCmd) !== false) {
-                        $this->setMegaCronHistoryStopped();
+                        $this->setMegaCronHistoryStopped($megacronHistoryEntry);
                         return;
                     }
                 }
@@ -80,7 +79,7 @@ class TaskProcessorHelper
 
             shell_exec($processCmd . $processCmdSuffix);
 
-           $this->setMegaCronHistoryStopped();
+           $this->setMegaCronHistoryStopped($megacronHistoryEntry);
         }
     }
 
@@ -91,7 +90,7 @@ class TaskProcessorHelper
     {
         return $this->binDirPath . '..'
         . DIRECTORY_SEPARATOR . 'var'
-        . DIRECTORY_SEPARATOR . 'comparon_scheduling'
+        . DIRECTORY_SEPARATOR . 'megacron_scheduling'
         . DIRECTORY_SEPARATOR;
     }
 
@@ -120,20 +119,25 @@ class TaskProcessorHelper
         return false;
     }
 
+    /**
+     * @return MegaCronHistory|null
+     */
     private function setMegaCronHistoryStarted(){
         if ($this->startStorageHistoryEntries) {
-            $megaCronHistory = $this->taskConfig->getMegaCronHistory();
+            $megaCronHistory = new MegaCronHistory();
             $megaCronHistory->setCronJobName($this->command->getName());
             $this->em->persist($megaCronHistory);
             $this->em->flush();
-            $this->taskConfig->setMegaCronHistory($megaCronHistory);
+            return $megaCronHistory;
         }
+        return null;
     }
 
-    private function setMegaCronHistoryStopped(){
-        if ($this->startStorageHistoryEntries) {
-            $megaCronHistory = $this->taskConfig->getMegaCronHistory();
-            $megaCronHistory->setCronJobName($this->command->getName());
+    /**
+     * @param MegaCronHistory|null $megaCronHistory
+     */
+    private function setMegaCronHistoryStopped(MegaCronHistory $megaCronHistory = null){
+        if (($this->startStorageHistoryEntries) && ($megaCronHistory instanceof MegaCronHistory)) {
             $megaCronHistory->setStopped(new \DateTime());
             $this->em->persist($megaCronHistory);
             $this->em->flush();
