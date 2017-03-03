@@ -31,8 +31,13 @@ class SchedulerCommand extends ContainerAwareCommand
         foreach ($this->getApplication()->all() as $command) {
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
+                $entityManager = null;
+                try{
+                    $entityManager = $this->getContainer()->get('doctrine')->getEntityManager();
+                }catch(\Exception $ex) {
+                }
                 foreach ($configs as $config) {
-                    (new TaskProcessorHelper($this->getBinDirPath(), $command, $config))->process();
+                    (new TaskProcessorHelper($this->getBinDirPath(), $command, $config, $entityManager))->process();
                 }
             }
         }

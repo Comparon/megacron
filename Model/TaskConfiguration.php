@@ -2,6 +2,8 @@
 
 namespace Comparon\SchedulingBundle\Model;
 
+use Comparon\SchedulingBundle\Entity\MegaCronHistory;
+
 class TaskConfiguration
 {
     /** @var string */
@@ -13,6 +15,9 @@ class TaskConfiguration
      * @var bool
      */
     private $withOverlapping = true;
+
+    /** @var MegaCronHistory */
+    private $megaCronHistory = null;
 
     /** @var string[] */
     private $parameters = [];
@@ -69,5 +74,22 @@ class TaskConfiguration
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * @return MegaCronHistory
+     */
+    public function getMegaCronHistory()
+    {
+        return $this->megaCronHistory;
+    }
+
+    /**
+     * Set MegaCronHistory-Entry, if you want a simple Entry for start and finish of cronJob
+     * @param MegaCronHistory $megaCronHistory
+     */
+    public function setMegaCronHistory($megaCronHistory)
+    {
+        $this->megaCronHistory = $megaCronHistory;
     }
 }
