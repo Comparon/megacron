@@ -18,7 +18,7 @@ This bundle is designed around the idea to schedule the commands within the proj
         // ...
         {
             "type": "vcs",
-            "url": "https://github.com/Comparon/ComparonSchedulingBundle.git"
+            "url": "https://github.com/Comparon/Megacron.git"
         }
     ]
 }
@@ -36,7 +36,7 @@ public function registerBundles()
 {
     $bundles = [
         // ...
-        new Comparon\SchedulingBundle\ComparonSchedulingBundle(),
+        new Comparon\MegacronBundle\ComparonMegacronBundle(),
     ];
     // ...
     return $bundles;
