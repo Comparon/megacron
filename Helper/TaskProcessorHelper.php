@@ -25,7 +25,7 @@ class TaskProcessorHelper
     private $em;
 
     /** @var bool */
-    private $startStorageHistoryEntries;
+    private $persistHistory;
 
     /**
      * @param string $binDirPath
@@ -38,7 +38,7 @@ class TaskProcessorHelper
         $this->command = $command;
         $this->taskConfig = $taskConfig;
         $this->em = $em;
-        $this->startStorageHistoryEntries = ($em instanceof EntityManagerInterface) && ($this->taskConfig->getUseMegaCronHistoryEntries());
+        $this->persistHistory = ($em instanceof EntityManagerInterface) && ($this->taskConfig->isPersistHistory());
     }
 
     public function process()
@@ -123,7 +123,7 @@ class TaskProcessorHelper
      * @return MegaCronHistory|null
      */
     private function setMegaCronHistoryStarted(){
-        if ($this->startStorageHistoryEntries) {
+        if ($this->persistHistory) {
             $megaCronHistory = new MegaCronHistory();
             $megaCronHistory->setCronJobName($this->command->getName());
             $this->em->persist($megaCronHistory);
@@ -137,7 +137,7 @@ class TaskProcessorHelper
      * @param MegaCronHistory|null $megaCronHistory
      */
     private function setMegaCronHistoryStopped(MegaCronHistory $megaCronHistory = null){
-        if (($this->startStorageHistoryEntries) && ($megaCronHistory instanceof MegaCronHistory)) {
+        if (($this->persistHistory) && ($megaCronHistory instanceof MegaCronHistory)) {
             $megaCronHistory->setStopped(new \DateTime());
             $this->em->persist($megaCronHistory);
             $this->em->flush();

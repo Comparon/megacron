@@ -17,7 +17,7 @@ class TaskConfiguration
     private $withOverlapping = true;
 
     /** @var bool */
-    private $useMegaCronHistoryEntries = false;
+    private $persistHistory = false;
 
     /** @var string[] */
     private $parameters = [];
@@ -79,13 +79,13 @@ class TaskConfiguration
     /**
      * @return boolean
      */
-    public function getUseMegaCronHistoryEntries()
+    public function isPersistHistory()
     {
-        return $this->useMegaCronHistoryEntries;
+        return $this->persistHistory;
     }
 
-    public function enableMegaCronHistoryEntries()
+    public function persistHistory()
     {
-        $this->useMegaCronHistoryEntries = true;
+        $this->persistHistory = true;
     }
 }
