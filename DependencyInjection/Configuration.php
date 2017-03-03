@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\SchedulingBundle\DependencyInjection;
+namespace Comparon\ComparonMegacronBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

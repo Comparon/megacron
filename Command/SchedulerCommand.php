@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Command;
+namespace Comparon\ComparonMegacronBundle\Command;
 
 use Comparon\SchedulingBundle\Helper\TaskProcessorHelper;
 use Comparon\SchedulingBundle\Model\TaskInterface;

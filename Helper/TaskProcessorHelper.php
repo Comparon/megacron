@@ -1,9 +1,9 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Helper;
+namespace Comparon\ComparonMegacronBundle\Helper;
 
-use Comparon\SchedulingBundle\Entity\MegaCronHistory;
-use Comparon\SchedulingBundle\Model\TaskConfiguration;
+use Comparon\ComparonMegacronBundle\Entity\MegaCronHistory;
+use Comparon\ComparonMegacronBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;

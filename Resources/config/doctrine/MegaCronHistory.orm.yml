@@ -1,7 +1,7 @@
-# src/Comparon\SchedulingBundle\Entity\MegaCronHistory.orm.yml
-Comparon\SchedulingBundle\Entity\MegaCronHistory:
+# src/Comparon\ComparonMegacronBundle\Entity\MegaCronHistory.orm.yml
+Comparon\ComparonMegacronBundle\Entity\MegaCronHistory:
     type: entity
-    table: "%megacron.history_table%"
+    table: "%comparon_megacron.history_table%"
     id:
         id:
             type: integer

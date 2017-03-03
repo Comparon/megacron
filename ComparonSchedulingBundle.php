@@ -1,9 +1,9 @@
 <?php
 
-namespace Comparon\SchedulingBundle;
+namespace Comparon\ComparonMegacronBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class ComparonSchedulingBundle extends Bundle
+class ComparonMegacronBundle extends Bundle
 {
 }
