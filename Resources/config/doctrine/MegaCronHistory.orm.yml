@@ -1,0 +1,22 @@
+# src/Comparon\SchedulingBundle\Entity\MegaCronHistory.orm.yml
+Comparon\SchedulingBundle\Entity\MegaCronHistory:
+    type: entity
+    table: "%megacron.history_table%"
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        cronJobName:
+            column: cronjob_name
+            type: string
+            length: 255
+        started:
+            column: started
+            type: datetime
+        stopped:
+            column: stopped
+            type: datetime
+            nullable: true
+    lifecycleCallbacks:
+        prePersist: [ onPrePersist ]
