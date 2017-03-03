@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\ComparonMegacronBundle\Model;
+namespace Comparon\MegacronBundle\Model;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

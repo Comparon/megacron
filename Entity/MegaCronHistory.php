@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\SchedulingBundle\Entity;
+namespace Comparon\MegacronBundle\Entity;
 
 class MegaCronHistory
 {

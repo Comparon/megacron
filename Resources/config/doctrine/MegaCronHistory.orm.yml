@@ -1,5 +1,5 @@
-# src/Comparon\ComparonMegacronBundle\Entity\MegaCronHistory.orm.yml
-Comparon\ComparonMegacronBundle\Entity\MegaCronHistory:
+# src/Comparon\MegacronBundle\Entity\MegaCronHistory.orm.yml
+Comparon\MegacronBundle\Entity\MegaCronHistory:
     type: entity
     table: "%comparon_megacron.history_table%"
     id:

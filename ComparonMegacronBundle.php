@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\ComparonMegacronBundle;
+namespace Comparon\MegacronBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

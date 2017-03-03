@@ -1,6 +1,6 @@
 <?php
 
-namespace Comparon\ComparonMegacronBundle\DependencyInjection;
+namespace Comparon\MegacronBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
