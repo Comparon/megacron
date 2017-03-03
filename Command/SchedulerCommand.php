@@ -31,8 +31,15 @@ class SchedulerCommand extends ContainerAwareCommand
         foreach ($this->getApplication()->all() as $command) {
             if ($command instanceof TaskInterface) {
                 $configs = $command->getTaskConfigurations();
+                $entityManager = null;
+                if (($this->getContainer()->has('doctrine')) && ($this->getContainer()->hasParameter('megacron.history_table'))) {
+                    $megaCronHistoryTable = $this->getContainer()->getParameter('megacron.history_table');
+                    if ($megaCronHistoryTable !== null) {
+                        $entityManager = $this->getContainer()->get('doctrine')->getEntityManager();
+                    }
+                }
                 foreach ($configs as $config) {
-                    (new TaskProcessorHelper($this->getBinDirPath(), $command, $config))->process();
+                    (new TaskProcessorHelper($this->getBinDirPath(), $command, $config, $entityManager))->process();
                 }
             }
         }

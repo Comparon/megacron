@@ -18,7 +18,11 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('comparon_scheduling');
+        $rootNode = $treeBuilder->root('megacron')
+                ->children()
+                ->scalarNode('history_table')->defaultValue('megacron_history')->end()
+                ->end()
+            ->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

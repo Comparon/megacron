@@ -2,6 +2,8 @@
 
 namespace Comparon\SchedulingBundle\Model;
 
+use Comparon\SchedulingBundle\Entity\MegaCronHistory;
+
 class TaskConfiguration
 {
     /** @var string */
@@ -13,6 +15,9 @@ class TaskConfiguration
      * @var bool
      */
     private $withOverlapping = true;
+
+    /** @var bool */
+    private $persistHistory = false;
 
     /** @var string[] */
     private $parameters = [];
@@ -69,5 +74,18 @@ class TaskConfiguration
     public function getParameters()
     {
         return $this->parameters;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isPersistHistory()
+    {
+        return $this->persistHistory;
+    }
+
+    public function persistHistory()
+    {
+        $this->persistHistory = true;
     }
 }
