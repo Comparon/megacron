@@ -1,4 +1,4 @@
-# Comparon Scheduling Bundle
+# Comparon Megacron Bundle
 
 This bundle is designed around the idea to schedule the commands within the project and therefore under VCS control.
 
