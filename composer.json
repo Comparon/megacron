@@ -13,5 +13,8 @@
       "mtdowling/cron-expression": "1.2.0",
       "doctrine/orm": "2.5.6",
       "doctrine/doctrine-bundle": "1.6.8"
-    }
+    },
+  "require-dev": {
+    "sstalle/php7cc": "1.2.1"
+  }
 }
