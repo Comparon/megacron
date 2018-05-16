@@ -43,13 +43,13 @@ return  [
 ```
 4. Add command to services.yaml
 
-
+```yaml
     Comparon\MegacronBundle\Command\SchedulerCommand:
         arguments:
-          $projectDir: '%kernel.project_dir%%'
+          $projectDir: '%kernel.project_dir%'
         tags:
           - 'console.command'
-
+```
 
 ## Start using the bundle
 
@@ -64,31 +64,30 @@ class DemoCommand extends ContainerAwareCommand implements TaskInterface
     {
         // ...
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         // ...
     }
-    
+
     /**
      * @return TaskConfiguration[]
      */
     public function getTaskConfigurations()
     {
         $configs = [];
-        
+
         $configMonday = new TaskConfiguration();
         $configMonday->setCronExpression('* * * * 1');
         $configs[] = $configMonday;
-        
+
         $configTuesday = new TaskConfiguration();
         $configTuesday
             ->setCronExpression('0 * * * 2')
             ->setWithOverlapping(false)
-            ->persistHistory()
         ;
         $configs[] = $configTuesday;
-        
+
         return $configs;
     }
 }
