@@ -14,9 +14,6 @@ class TaskConfiguration
      */
     private $withOverlapping = true;
 
-    /** @var bool */
-    private $persistHistory = false;
-
     /** @var string[] */
     private $parameters = [];
 
