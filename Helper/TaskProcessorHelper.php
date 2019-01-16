@@ -5,6 +5,7 @@ namespace Comparon\MegacronBundle\Helper;
 use Comparon\MegacronBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TaskProcessorHelper
 {
@@ -18,8 +19,8 @@ class TaskProcessorHelper
     private $taskConfig;
 
     /**
-     * @param string $binDirPath
-     * @param Command $command
+     * @param string            $binDirPath
+     * @param Command           $command
      * @param TaskConfiguration $taskConfig
      */
     public function __construct($binDirPath, Command $command, TaskConfiguration $taskConfig)
@@ -53,8 +54,8 @@ class TaskProcessorHelper
                     unlink($pidFilePath);
                 } else {
                     $pid = intval(file_get_contents($pidFilePath));
-                    $result = shell_exec("ps -fp {$pid}");
-                    if (strpos($result, $processCmd) !== false) {
+                    $isRunning = posix_kill($pid, 0);
+                    if ($isRunning) {
                         return;
                     }
                 }
@@ -69,31 +70,22 @@ class TaskProcessorHelper
         }
     }
 
-    /**
-     * @return string
-     */
-    private function getPidFileDir()
+    private function getPidFileDir(): string
     {
         return $this->binDirPath . '..'
-        . DIRECTORY_SEPARATOR . 'var'
-        . DIRECTORY_SEPARATOR . 'megacron'
-        . DIRECTORY_SEPARATOR;
+            . DIRECTORY_SEPARATOR . 'var'
+            . DIRECTORY_SEPARATOR . 'megacron'
+            . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @param string $dirPath
-     * @throws \Exception
      */
     private function createDir(string $dirPath): void
     {
-        if (!file_exists($dirPath) && !mkdir($dirPath)) {
-            throw new \Exception("Could not create directory {$dirPath}");
-        }
+        (new Filesystem())->mkdir($dirPath);
     }
 
-    /**
-     * @return bool
-     */
     private function isDue(): bool
     {
         $expression = $this->taskConfig->getCronExpression();
