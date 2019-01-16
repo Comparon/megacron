@@ -2,13 +2,10 @@
 
 namespace Comparon\MegacronBundle\Helper;
 
-use Comparon\MegacronBundle\Entity\MegaCronHistory;
 use Comparon\MegacronBundle\Model\TaskConfiguration;
 use Cron\CronExpression;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Command\Command;
-
-use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TaskProcessorHelper
 {
@@ -21,27 +18,22 @@ class TaskProcessorHelper
     /** @var TaskConfiguration */
     private $taskConfig;
 
-    /** @var EntityManagerInterface | null */
-    private $em;
-
-    /** @var bool */
-    private $persistHistory;
-
     /**
-     * @param string $binDirPath
-     * @param Command $command
+     * @param string            $binDirPath
+     * @param Command           $command
      * @param TaskConfiguration $taskConfig
      */
-    public function __construct($binDirPath, Command $command, TaskConfiguration $taskConfig, EntityManagerInterface $em = null)
+    public function __construct($binDirPath, Command $command, TaskConfiguration $taskConfig)
     {
         $this->binDirPath = $binDirPath;
         $this->command = $command;
         $this->taskConfig = $taskConfig;
-        $this->em = $em;
-        $this->persistHistory = ($em instanceof EntityManagerInterface) && ($this->taskConfig->isPersistHistory());
     }
 
-    public function process()
+    /**
+     * @throws \Exception
+     */
+    public function process(): void
     {
         $pidFileDir = $this->getPidFileDir();
         $this->createDir($pidFileDir);
@@ -57,16 +49,13 @@ class TaskProcessorHelper
                 $processCmd .= ' ' . implode(' ', $this->taskConfig->getParameters());
             }
 
-            $megacronHistoryEntry = $this->setMegaCronHistoryStarted();
-
             if (file_exists($pidFilePath)) {
                 if ($this->taskConfig->isWithOverlapping()) {
                     unlink($pidFilePath);
                 } else {
                     $pid = intval(file_get_contents($pidFilePath));
-                    $result = shell_exec("ps -fp {$pid}");
-                    if (strpos($result, $processCmd) !== false) {
-                        $this->setMegaCronHistoryStopped($megacronHistoryEntry);
+                    $isRunning = posix_kill($pid, 0);
+                    if ($isRunning) {
                         return;
                     }
                 }
@@ -78,37 +67,26 @@ class TaskProcessorHelper
             }
 
             shell_exec($processCmd . $processCmdSuffix);
-
-           $this->setMegaCronHistoryStopped($megacronHistoryEntry);
         }
     }
 
-    /**
-     * @return string
-     */
-    private function getPidFileDir()
+    private function getPidFileDir(): string
     {
         return $this->binDirPath . '..'
-        . DIRECTORY_SEPARATOR . 'var'
-        . DIRECTORY_SEPARATOR . 'megacron'
-        . DIRECTORY_SEPARATOR;
+            . DIRECTORY_SEPARATOR . 'var'
+            . DIRECTORY_SEPARATOR . 'megacron'
+            . DIRECTORY_SEPARATOR;
     }
 
     /**
      * @param string $dirPath
-     * @throws \Exception
      */
-    private function createDir($dirPath)
+    private function createDir(string $dirPath): void
     {
-        if (!file_exists($dirPath) && !mkdir($dirPath)) {
-            throw new \Exception("Could not create directory {$dirPath}");
-        }
+        (new Filesystem())->mkdir($dirPath);
     }
 
-    /**
-     * @return bool
-     */
-    private function isDue()
+    private function isDue(): bool
     {
         $expression = $this->taskConfig->getCronExpression();
         if (CronExpression::isValidExpression($expression)) {
@@ -117,31 +95,6 @@ class TaskProcessorHelper
         }
         // TODO: implement logging
         return false;
-    }
-
-    /**
-     * @return MegaCronHistory|null
-     */
-    private function setMegaCronHistoryStarted(){
-        if ($this->persistHistory) {
-            $megaCronHistory = new MegaCronHistory();
-            $megaCronHistory->setCronJobName($this->command->getName());
-            $this->em->persist($megaCronHistory);
-            $this->em->flush();
-            return $megaCronHistory;
-        }
-        return null;
-    }
-
-    /**
-     * @param MegaCronHistory|null $megaCronHistory
-     */
-    private function setMegaCronHistoryStopped(MegaCronHistory $megaCronHistory = null){
-        if (($this->persistHistory) && ($megaCronHistory instanceof MegaCronHistory)) {
-            $megaCronHistory->setStopped(new \DateTime());
-            $this->em->persist($megaCronHistory);
-            $this->em->flush();
-        }
     }
 }
 

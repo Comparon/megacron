@@ -10,5 +10,5 @@ interface TaskInterface
     /**
      * @return TaskConfiguration[]
      */
-    public function getTaskConfigurations();
+    public function getTaskConfigurations(): array;
 }
