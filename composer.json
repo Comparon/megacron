@@ -10,12 +10,12 @@
       }
     },
     "require": {
-      "php": "^7.1.3",
-      "symfony/framework-bundle": "^4.0",
-      "mtdowling/cron-expression": "1.2.0"
+      "php": "^7.4.3",
+      "symfony/framework-bundle": "^4.4",
+      "dragonmantank/cron-expression": "2.3.0"
     },
     "require-dev": {
-      "symfony/process": "^4.0",
-      "symfony/console": "^4.0"
+      "symfony/process": "^4.4",
+      "symfony/console": "^4.4"
     }
 }
