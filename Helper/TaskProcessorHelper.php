@@ -17,16 +17,21 @@ class TaskProcessorHelper
     /** @var TaskConfiguration */
     private $taskConfig;
 
+    /** @var string */
+    private string $phpBinaryPath;
+
     /**
      * @param string $binDirPath
      * @param Command $command
      * @param TaskConfiguration $taskConfig
+     * @param string $phpBinaryPath
      */
-    public function __construct($binDirPath, Command $command, TaskConfiguration $taskConfig)
+    public function __construct(string $binDirPath, Command $command, TaskConfiguration $taskConfig, string $phpBinaryPath = '')
     {
         $this->binDirPath = $binDirPath;
         $this->command = $command;
         $this->taskConfig = $taskConfig;
+        $this->phpBinaryPath = $phpBinaryPath;
     }
 
     /**
@@ -65,7 +70,7 @@ class TaskProcessorHelper
                 $processCmdSuffix .= ' echo $! >> ' . $pidFilePath;
             }
 
-            shell_exec($processCmd . $processCmdSuffix);
+            shell_exec($this->phpBinaryPath.' '.$processCmd . $processCmdSuffix);
         }
     }
 
@@ -75,9 +80,9 @@ class TaskProcessorHelper
     private function getPidFileDir()
     {
         return $this->binDirPath . '..'
-        . DIRECTORY_SEPARATOR . 'var'
-        . DIRECTORY_SEPARATOR . 'megacron'
-        . DIRECTORY_SEPARATOR;
+            . DIRECTORY_SEPARATOR . 'var'
+            . DIRECTORY_SEPARATOR . 'megacron'
+            . DIRECTORY_SEPARATOR;
     }
 
     /**
